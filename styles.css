@@ -1,12 +1,13 @@
 :root {
   --bg: #F7F5F0;
   --surface: #FFFFFF;
-  --ink: #2B2B28;
+  --ink: #1A1814;
   --muted: #8A887F;
-  --line: #E6E2D8;
+  --line: #E0DDD6;
   --accent: #3D6B5E;
   --accent-dark: #2F564B;
-  --accent-soft: #EAF1EE;
+  --accent-mid: #5A9A8A;
+  --accent-soft: #EBF2EF;
   --danger: #B4503C;
   --radius: 16px;
   --shadow: 0 1px 2px rgba(43, 43, 40, .04), 0 8px 24px rgba(43, 43, 40, .06);
@@ -425,6 +426,18 @@ a { color: var(--accent); }
 .footer .lic strong { color: var(--accent-dark); }
 .footer .privacy { font-size: 12px; }
 .footer .credit { font-size: 12.5px; }
+.footer .hub { margin-top: 12px; }
+.footer .hub a {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.footer .hub a:hover { border-color: var(--accent); background: var(--accent-soft); }
 .footer a { color: var(--muted); text-decoration: underline; }
 .footer a:hover { color: var(--accent); }
 
