@@ -137,6 +137,7 @@ a { color: var(--accent); }
   justify-content: center;
   gap: 8px;
 }
+.mode-tab > span:not(.mode-sub) { white-space: nowrap; }
 .mode-tab .mode-sub { font-size: 12px; font-weight: 500; opacity: .8; }
 .mode-tab:hover { color: var(--ink); }
 .mode-tab.is-active { background: var(--accent); color: #fff; }
@@ -395,4 +396,6 @@ a { color: var(--accent); }
   .stage-actions { width: 100%; }
   .stage-actions .btn { flex: 1; }
   .dropzone { padding: 36px 16px; }
+  .mode-tab { font-size: 14px; padding: 10px 8px; }
+  .mode-tab .mode-sub { display: none; }
 }
