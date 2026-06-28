@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>배경 제거 · Background Remover</title>
+  <meta name="description" content="브라우저에서 바로 이미지 배경을 제거합니다. 서버 전송 없음, 무제한, 무료." />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233D6B5E'/%3E%3Cpath d='M9 21l4.5-6 3 3.8L20 13l4 8z' fill='%23fff'/%3E%3Ccircle cx='12' cy='11' r='2.4' fill='%23fff'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="masthead">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28"><rect width="32" height="32" rx="7" fill="#3D6B5E"/><path d="M9 21l4.5-6 3 3.8L20 13l4 8z" fill="#fff"/><circle cx="12" cy="11" r="2.4" fill="#fff"/></svg>
+        </span>
+        <div class="brand-text">
+          <h1>배경 제거</h1>
+          <p>업로드하면 브라우저에서 바로 배경을 지웁니다</p>
+        </div>
+      </div>
+      <ul class="badges" aria-label="특징">
+        <li>🔒 서버 전송 없음</li>
+        <li>∞ 무제한 · 무료</li>
+        <li>🖼 원본 해상도</li>
+      </ul>
+    </header>
+
+    <!-- 모드 선택 -->
+    <div class="mode-tabs" role="tablist" aria-label="배경 제거 방식">
+      <button id="modeAi" class="mode-tab is-active" role="tab" aria-selected="true" type="button">
+        ✨ AI 자동 <span class="mode-sub">아무 사진이나</span>
+      </button>
+      <button id="modeColor" class="mode-tab" role="tab" aria-selected="false" type="button">
+        🎨 단색 배경 <span class="mode-sub">즉시 · 다운로드 0</span>
+      </button>
+    </div>
+
+    <!-- 업로드 영역 -->
+    <section id="dropzone" class="dropzone" aria-label="이미지 업로드">
+      <input id="fileInput" type="file" accept="image/*" multiple hidden />
+      <div class="dropzone-inner">
+        <div class="dz-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="46" height="46"><path d="M24 30V10m0 0l-7 7m7-7l7 7" fill="none" stroke="#3D6B5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 30v6a4 4 0 004 4h24a4 4 0 004-4v-6" fill="none" stroke="#3D6B5E" stroke-width="3" stroke-linecap="round"/></svg>
+        </div>
+        <p class="dz-title">이미지를 끌어다 놓거나</p>
+        <button id="pickBtn" class="btn btn-primary" type="button">파일 선택</button>
+        <p class="dz-hint">JPG · PNG · WEBP · 여러 장 가능</p>
+      </div>
+    </section>
+
+    <!-- 첫 실행 안내 -->
+    <p id="firstRunNote" class="first-run-note">
+      💡 처음 실행할 땐 AI 모델(약 40MB)을 한 번 내려받느라 몇 초~수십 초 걸릴 수 있어요. 이후엔 빨라집니다.
+    </p>
+
+    <!-- 처리/결과 영역 -->
+    <section id="stage" class="stage" hidden aria-live="polite">
+      <div class="stage-head">
+        <div>
+          <h2 id="stageName" class="stage-name">처리 중…</h2>
+          <p id="stageMeta" class="stage-meta"></p>
+        </div>
+        <div class="stage-actions">
+          <button id="downloadBtn" class="btn btn-primary" type="button" disabled>PNG 다운로드</button>
+          <button id="resetBtn" class="btn btn-ghost" type="button">새 이미지</button>
+        </div>
+      </div>
+
+      <!-- 진행 표시 -->
+      <div id="progress" class="progress" hidden>
+        <div class="spinner" aria-hidden="true"></div>
+        <div class="progress-text">
+          <span id="progressLabel">배경을 제거하는 중…</span>
+          <div class="bar"><div id="bar" class="bar-fill"></div></div>
+        </div>
+      </div>
+
+      <!-- 비교 뷰 -->
+      <div id="compare" class="compare" hidden>
+        <figure class="pane">
+          <figcaption>원본</figcaption>
+          <div class="pane-img"><img id="origImg" alt="원본 이미지" /></div>
+        </figure>
+        <figure class="pane">
+          <figcaption>결과 <span class="muted">(투명 배경)</span></figcaption>
+          <div class="pane-img checker"><img id="resultImg" alt="배경 제거 결과" /></div>
+        </figure>
+      </div>
+
+      <!-- 단색 모드 컨트롤 -->
+      <div id="colorControls" class="color-controls" hidden>
+        <div class="cc-row">
+          <span class="cc-label">배경색</span>
+          <span id="keySwatch" class="cc-swatch" title="현재 배경색"></span>
+          <span class="cc-hint">원본 사진에서 지울 배경을 클릭해 색을 고르세요</span>
+          <button id="autoDetect" class="btn btn-ghost btn-sm" type="button">corners 자동 감지</button>
+        </div>
+        <div class="cc-row">
+          <label class="cc-label" for="tolerance">강도</label>
+          <input id="tolerance" type="range" min="5" max="120" value="45" />
+          <span id="toleranceVal" class="cc-val">45</span>
+        </div>
+      </div>
+
+      <p id="errorBox" class="error-box" hidden></p>
+    </section>
+
+    <!-- 히스토리 -->
+    <section id="historySection" class="history" hidden>
+      <div class="history-head">
+        <h2>최근 작업 <span id="historyCount" class="muted"></span></h2>
+        <button id="clearHistory" class="btn btn-ghost btn-sm" type="button">전체 삭제</button>
+      </div>
+      <p class="history-note">이 기기에만 저장돼요. 최근 10개까지 보관하고, 클릭하면 다시 다운로드할 수 있어요.</p>
+      <div id="historyGrid" class="history-grid"></div>
+    </section>
+
+    <footer class="footer">
+      Built with <a href="https://github.com/imgly/background-removal-js" target="_blank" rel="noopener">@imgly/background-removal</a> (AGPL) ·
+      Source: <a href="https://github.com/hanariago/tool-bg-remover" target="_blank" rel="noopener">github.com/hanariago/tool-bg-remover</a>
+    </footer>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
