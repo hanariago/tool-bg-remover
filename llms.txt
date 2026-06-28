@@ -24,3 +24,10 @@ License: AGPL-3.0
 ## Good for
 - Removing backgrounds from product photos, portraits, profile pictures, stickers, logos.
 - A free, private alternative to remove.bg with unlimited full-resolution downloads.
+
+## FAQ
+- **Are photos uploaded to a server?** No — all processing happens in the browser; images are never sent anywhere.
+- **AI auto vs. solid-color mode?** AI auto uses a local model for any photo (model downloads once); solid-color removes plain backgrounds instantly with no download.
+- **Output format?** Transparent-background PNG at the original resolution.
+- **Is it free / any limits?** Completely free, unlimited, no login, no watermark.
+- **What works best?** Images where the subject stands out clearly (people, products, logos); AI mode also handles complex backgrounds.

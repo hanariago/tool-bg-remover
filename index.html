@@ -38,6 +38,8 @@
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@thezenvoid" />
+  <meta name="twitter:creator" content="@thezenvoid" />
   <meta name="twitter:title" content="배경 제거 - 무료 온라인 이미지 배경 제거 (투명 PNG)" />
   <meta name="twitter:description" content="브라우저에서 바로 배경 제거. 서버 업로드 없음, 원본 해상도 투명 PNG 무제한·무료." />
   <meta name="twitter:image" content="https://hanariago.github.io/tool-bg-remover/og-image.png" />
@@ -69,6 +71,21 @@
     "isAccessibleForFree": true,
     "license": "https://www.gnu.org/licenses/agpl-3.0.html",
     "author": { "@type": "Person", "name": "Lena", "url": "https://github.com/hanariago" }
+  }
+  </script>
+
+  <!-- JSON-LD: FAQ (검색 리치 결과 / AI 답변 인용용) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "사진이 서버로 업로드되나요?", "acceptedAnswer": { "@type": "Answer", "text": "아니요. 모든 처리는 여러분의 브라우저 안에서만 이루어지며, 이미지는 어떤 서버로도 전송되지 않습니다." } },
+      { "@type": "Question", "name": "AI 자동 모드와 단색 모드의 차이는 무엇인가요?", "acceptedAnswer": { "@type": "Answer", "text": "AI 자동 모드는 로컬 AI 모델로 인물·상품·복잡한 배경 등 어떤 사진이든 처리합니다(첫 실행 시 모델 1회 다운로드). 단색 모드는 모델 없이 즉시 동작하며, 배경이 단색일 때 가장 깔끔합니다." } },
+      { "@type": "Question", "name": "결과 이미지 형식은 무엇인가요?", "acceptedAnswer": { "@type": "Answer", "text": "배경이 투명하게 처리된 PNG 파일로, 원본 해상도 그대로 저장됩니다." } },
+      { "@type": "Question", "name": "무료인가요? 사용 횟수 제한이 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "완전 무료이며 사용 횟수·해상도 제한이 없습니다. 로그인이나 워터마크도 없습니다." } },
+      { "@type": "Question", "name": "어떤 이미지에서 잘 되나요?", "acceptedAnswer": { "@type": "Answer", "text": "인물, 상품, 로고처럼 피사체가 배경과 뚜렷이 구분될 때 가장 잘 됩니다. AI 모드는 복잡한 배경도 처리합니다." } }
+    ]
   }
   </script>
 </head>
@@ -198,6 +215,32 @@
     <section class="about">
       <h2 data-i18n="about_title">이미지 배경 제거, 어떻게 동작하나요?</h2>
       <p data-i18n="about_body">이 무료 온라인 도구는 사진의 배경을 지워 투명 PNG로 만들어 줍니다. 모든 처리는 여러분의 브라우저 안에서 이루어지며, 이미지는 어떤 서버로도 전송되지 않습니다. AI 자동 모드는 인물·제품·복잡한 배경 등 어떤 사진이든 처리하고, 단색 배경 모드는 모델 다운로드 없이 즉시 단색 배경을 제거합니다. 결과는 원본 해상도 그대로, 횟수 제한 없이 무료로 내려받을 수 있습니다.</p>
+      <p data-i18n="about_use">프로필 사진과 상품 사진의 누끼를 따거나, 투명 배경 PNG를 만들거나, 쇼핑몰·블로그·유튜브 썸네일용 이미지를 손쉽게 만들 수 있습니다. 사진 배경 지우기, 누끼 따기가 클릭 몇 번으로 끝납니다.</p>
+    </section>
+
+    <!-- FAQ (검색 리치결과 + i18n) -->
+    <section class="faq">
+      <h2 data-i18n="faq_title">자주 묻는 질문</h2>
+      <details>
+        <summary data-i18n="faq_q1">사진이 서버로 업로드되나요?</summary>
+        <p data-i18n="faq_a1">아니요. 모든 처리는 여러분의 브라우저 안에서만 이루어지며, 이미지는 어떤 서버로도 전송되지 않습니다.</p>
+      </details>
+      <details>
+        <summary data-i18n="faq_q2">AI 자동 모드와 단색 모드의 차이는 무엇인가요?</summary>
+        <p data-i18n="faq_a2">AI 자동 모드는 로컬 AI 모델로 인물·상품·복잡한 배경 등 어떤 사진이든 처리합니다(첫 실행 시 모델 1회 다운로드). 단색 모드는 모델 없이 즉시 동작하며, 배경이 단색일 때 가장 깔끔합니다.</p>
+      </details>
+      <details>
+        <summary data-i18n="faq_q3">결과 이미지 형식은 무엇인가요?</summary>
+        <p data-i18n="faq_a3">배경이 투명하게 처리된 PNG 파일로, 원본 해상도 그대로 저장됩니다.</p>
+      </details>
+      <details>
+        <summary data-i18n="faq_q4">무료인가요? 사용 횟수 제한이 있나요?</summary>
+        <p data-i18n="faq_a4">완전 무료이며 사용 횟수·해상도 제한이 없습니다. 로그인이나 워터마크도 없습니다.</p>
+      </details>
+      <details>
+        <summary data-i18n="faq_q5">어떤 이미지에서 잘 되나요?</summary>
+        <p data-i18n="faq_a5">인물, 상품, 로고처럼 피사체가 배경과 뚜렷이 구분될 때 가장 잘 됩니다. AI 모드는 복잡한 배경도 처리합니다.</p>
+      </details>
     </section>
 
     <footer class="footer">
@@ -210,9 +253,16 @@
         <a href="https://github.com/hanariago/tool-bg-remover" target="_blank" rel="noopener" data-i18n="footer_source">소스 코드 (GitHub)</a>
       </p>
       <p class="privacy" data-i18n="footer_privacy">이미지는 서버로 전송되지 않고 브라우저에서만 처리됩니다.</p>
+      <p class="credit">
+        <span data-i18n="made_by">만든 사람</span>
+        <a href="https://github.com/hanariago" target="_blank" rel="noopener">Lena</a> ·
+        <a href="https://x.com/thezenvoid" target="_blank" rel="noopener">@thezenvoid</a>
+      </p>
     </footer>
   </main>
 
   <script type="module" src="app.js"></script>
+  <!-- 도구 허브 교차링크 (tools-hub 공개 시 자동 작동, 현재 private라 비활성) -->
+  <script src="https://hanariago.github.io/tools-hub/footer.js" defer></script>
 </body>
 </html>

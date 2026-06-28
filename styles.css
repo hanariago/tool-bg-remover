@@ -372,6 +372,45 @@ a { color: var(--accent); }
 .about h2 { margin: 0 0 10px; font-size: 17px; }
 .about p { margin: 0; font-size: 14px; color: #55534C; line-height: 1.7; }
 
+/* ── FAQ ── */
+.faq { margin-top: 20px; }
+.faq h2 { margin: 0 0 12px; font-size: 17px; }
+.faq details {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 2px 16px;
+  margin-bottom: 10px;
+}
+.faq details[open] { border-color: var(--accent); }
+.faq summary {
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 13px 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+";
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 400;
+  flex: none;
+}
+.faq details[open] summary::after { content: "−"; }
+.faq details p {
+  margin: 0 0 14px;
+  font-size: 14px;
+  color: #55534C;
+  line-height: 1.7;
+}
+
 /* ── Footer ── */
 .footer {
   margin-top: 32px;
@@ -385,6 +424,7 @@ a { color: var(--accent); }
 .footer .lic { font-size: 13px; color: #55534C; }
 .footer .lic strong { color: var(--accent-dark); }
 .footer .privacy { font-size: 12px; }
+.footer .credit { font-size: 12.5px; }
 .footer a { color: var(--muted); text-decoration: underline; }
 .footer a:hover { color: var(--accent); }
 
