@@ -1,10 +1,14 @@
 // 배경 제거 — 100% 브라우저 처리. 이미지는 어디로도 전송되지 않습니다.
 //   1) AI 자동  : @imgly/background-removal (AGPL). 로컬 모델, 아무 사진이나.
 //   2) 단색 배경 : 크로마키. 모델 다운로드 없이 즉시. 단색 배경에만 적합.
+// 라이브러리·모델·wasm은 외부 CDN이 아니라 이 repo(vendor/)에서 자가호스팅 → 공급망 위험 제거.
+// vendor/는 `npm run vendor`(scripts/vendor.mjs)로 생성. 버전 업그레이드 방법도 그 스크립트 참고.
 
-import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm";
+import { removeBackground } from "./vendor/background-removal.mjs";
 
-const AI_CONFIG = { model: "isnet_fp16" };
+// 자가호스팅: 라이브러리·모델·wasm 모두 같은 도메인(이 repo)에서 로드. 외부 CDN 없음.
+const PUBLIC_PATH = new URL("vendor/imgly-data/", document.baseURI).href;
+const AI_CONFIG = { model: "isnet_fp16", publicPath: PUBLIC_PATH };
 const HISTORY_LIMIT = 10;
 const SUPPORTED = ["ko", "en", "ja", "zh", "es"];
 

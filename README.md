@@ -26,10 +26,19 @@
 3. 결과 확인 후 **PNG 다운로드**
 
 ## 기술 스택
-- 순수 HTML / CSS / JS (빌드 도구 없음)
+- 순수 HTML / CSS / JS
 - [@imgly/background-removal](https://github.com/imgly/background-removal-js) — AGPL License
-- AI 모델·WASM은 jsDelivr CDN에서 1회 다운로드 후 브라우저 캐시
+- **자가호스팅**: 라이브러리·AI 모델·WASM을 외부 CDN이 아니라 이 repo(`vendor/`)에서 직접 제공 → 공급망 위험 제거, 오프라인 동작
+- **CSP**(Content-Security-Policy)로 모든 리소스를 자기 도메인으로만 제한
 - 서버 없음, 브라우저에서만 동작 (GitHub Pages 정적 호스팅)
+
+### 빌드 (vendor 갱신)
+사이트 자체는 정적 파일이라 빌드가 필요 없지만, 라이브러리/모델을 다시 받거나 버전을 올릴 때:
+```bash
+npm install
+npm run vendor   # scripts/vendor.mjs — 라이브러리 번들 + 모델/wasm 미러링 → vendor/
+```
+업그레이드: `package.json`의 `@imgly/background-removal` 버전과 `scripts/vendor.mjs`의 `VER`만 바꾸고 다시 실행.
 
 ## 프라이버시
 이미지는 브라우저 메모리 안에서만 처리됩니다. 어떤 서버로도 업로드되지 않으며,

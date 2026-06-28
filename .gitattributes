@@ -1,0 +1,5 @@
+# 벤더링된 모델/wasm 청크는 바이너리 — EOL 변환 절대 금지(변환 시 손상됨)
+vendor/imgly-data/** binary
+# 번들 JS는 LF 고정
+vendor/background-removal.mjs text eol=lf
+*.mjs text eol=lf
