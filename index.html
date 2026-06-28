@@ -3,38 +3,114 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>배경 제거 · Background Remover</title>
-  <meta name="description" content="브라우저에서 바로 이미지 배경을 제거합니다. 서버 전송 없음, 무제한, 무료." />
+
+  <!-- Primary SEO -->
+  <title>배경 제거 - 무료 온라인 이미지 배경 제거 (투명 PNG) | Background Remover</title>
+  <meta name="description" content="이미지 배경을 브라우저에서 바로 제거하는 무료 온라인 도구. 서버 업로드 없이 완전 로컬 처리, 원본 해상도 투명 PNG 무제한 다운로드. AI 자동 + 단색 배경 모드 지원." />
+  <meta name="keywords" content="배경 제거, 배경제거, 누끼, 누끼 따기, 이미지 배경 제거, 투명 png, remove background, background remover, free background remover, 무료 배경 제거, 사진 배경 제거" />
+  <meta name="author" content="Lena" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://hanariago.github.io/tool-bg-remover/" />
+  <meta name="theme-color" content="#3D6B5E" />
+
+  <!-- hreflang (다국어) -->
+  <link rel="alternate" hreflang="ko" href="https://hanariago.github.io/tool-bg-remover/?lang=ko" />
+  <link rel="alternate" hreflang="en" href="https://hanariago.github.io/tool-bg-remover/?lang=en" />
+  <link rel="alternate" hreflang="ja" href="https://hanariago.github.io/tool-bg-remover/?lang=ja" />
+  <link rel="alternate" hreflang="zh" href="https://hanariago.github.io/tool-bg-remover/?lang=zh" />
+  <link rel="alternate" hreflang="es" href="https://hanariago.github.io/tool-bg-remover/?lang=es" />
+  <link rel="alternate" hreflang="x-default" href="https://hanariago.github.io/tool-bg-remover/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://hanariago.github.io/tool-bg-remover/" />
+  <meta property="og:title" content="배경 제거 - 무료 온라인 이미지 배경 제거 (투명 PNG)" />
+  <meta property="og:description" content="브라우저에서 바로 배경 제거. 서버 업로드 없음, 원본 해상도 투명 PNG 무제한·무료. AI 자동 + 단색 배경 모드." />
+  <meta property="og:image" content="https://hanariago.github.io/tool-bg-remover/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Background Remover" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta property="og:locale:alternate" content="ja_JP" />
+  <meta property="og:locale:alternate" content="zh_CN" />
+  <meta property="og:locale:alternate" content="es_ES" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="배경 제거 - 무료 온라인 이미지 배경 제거 (투명 PNG)" />
+  <meta name="twitter:description" content="브라우저에서 바로 배경 제거. 서버 업로드 없음, 원본 해상도 투명 PNG 무제한·무료." />
+  <meta name="twitter:image" content="https://hanariago.github.io/tool-bg-remover/og-image.png" />
+
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233D6B5E'/%3E%3Cpath d='M9 21l4.5-6 3 3.8L20 13l4 8z' fill='%23fff'/%3E%3Ccircle cx='12' cy='11' r='2.4' fill='%23fff'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- JSON-LD: 구조화 데이터 (검색·AI 이해용) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "배경 제거 (Background Remover)",
+    "url": "https://hanariago.github.io/tool-bg-remover/",
+    "description": "이미지 배경을 브라우저에서 바로 제거하는 무료 온라인 도구. 서버 업로드 없이 완전 로컬 처리, 원본 해상도 투명 PNG 무제한 다운로드.",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (web browser)",
+    "browserRequirements": "Requires JavaScript",
+    "inLanguage": ["ko", "en", "ja", "zh", "es"],
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "AI 자동 배경 제거 (로컬 처리)",
+      "단색 배경 크로마키 제거",
+      "원본 해상도 투명 PNG 무제한 다운로드",
+      "이미지 외부 전송 없음 (완전 로컬)",
+      "드래그앤드롭 · 다중 업로드"
+    ],
+    "isAccessibleForFree": true,
+    "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+    "author": { "@type": "Person", "name": "Lena", "url": "https://github.com/hanariago" }
+  }
+  </script>
 </head>
 <body>
   <main class="app">
+    <div class="topbar">
+      <label class="lang-wrap">
+        <span class="sr-only" data-i18n="lang_label">Language</span>
+        <select id="langSelect" aria-label="Language">
+          <option value="ko">한국어</option>
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+          <option value="zh">中文</option>
+          <option value="es">Español</option>
+        </select>
+      </label>
+    </div>
+
     <header class="masthead">
       <div class="brand">
         <span class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 32 32" width="28" height="28"><rect width="32" height="32" rx="7" fill="#3D6B5E"/><path d="M9 21l4.5-6 3 3.8L20 13l4 8z" fill="#fff"/><circle cx="12" cy="11" r="2.4" fill="#fff"/></svg>
         </span>
         <div class="brand-text">
-          <h1>배경 제거</h1>
-          <p>업로드하면 브라우저에서 바로 배경을 지웁니다</p>
+          <h1 data-i18n="brand_h1">배경 제거</h1>
+          <p data-i18n="brand_sub">업로드하면 브라우저에서 바로 배경을 지웁니다</p>
         </div>
       </div>
       <ul class="badges" aria-label="특징">
-        <li>🔒 서버 전송 없음</li>
-        <li>∞ 무제한 · 무료</li>
-        <li>🖼 원본 해상도</li>
+        <li>🔒 <span data-i18n="badge_noserver">서버 전송 없음</span></li>
+        <li>∞ <span data-i18n="badge_unlimited">무제한 · 무료</span></li>
+        <li>🖼 <span data-i18n="badge_res">원본 해상도</span></li>
       </ul>
     </header>
 
     <!-- 모드 선택 -->
     <div class="mode-tabs" role="tablist" aria-label="배경 제거 방식">
       <button id="modeAi" class="mode-tab is-active" role="tab" aria-selected="true" type="button">
-        ✨ AI 자동 <span class="mode-sub">아무 사진이나</span>
+        ✨ <span data-i18n="mode_ai">AI 자동</span> <span class="mode-sub" data-i18n="mode_ai_sub">아무 사진이나</span>
       </button>
       <button id="modeColor" class="mode-tab" role="tab" aria-selected="false" type="button">
-        🎨 단색 배경 <span class="mode-sub">즉시 · 다운로드 0</span>
+        🎨 <span data-i18n="mode_color">단색 배경</span> <span class="mode-sub" data-i18n="mode_color_sub">즉시 · 다운로드 0</span>
       </button>
     </div>
 
@@ -45,14 +121,14 @@
         <div class="dz-icon" aria-hidden="true">
           <svg viewBox="0 0 48 48" width="46" height="46"><path d="M24 30V10m0 0l-7 7m7-7l7 7" fill="none" stroke="#3D6B5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 30v6a4 4 0 004 4h24a4 4 0 004-4v-6" fill="none" stroke="#3D6B5E" stroke-width="3" stroke-linecap="round"/></svg>
         </div>
-        <p class="dz-title">이미지를 끌어다 놓거나</p>
-        <button id="pickBtn" class="btn btn-primary" type="button">파일 선택</button>
-        <p class="dz-hint">JPG · PNG · WEBP · 여러 장 가능</p>
+        <p class="dz-title" data-i18n="dz_title">이미지를 끌어다 놓거나</p>
+        <button id="pickBtn" class="btn btn-primary" type="button" data-i18n="pick">파일 선택</button>
+        <p class="dz-hint" data-i18n="dz_hint">JPG · PNG · WEBP · 여러 장 가능</p>
       </div>
     </section>
 
     <!-- 첫 실행 안내 -->
-    <p id="firstRunNote" class="first-run-note">
+    <p id="firstRunNote" class="first-run-note" data-i18n="first_run">
       💡 처음 실행할 땐 AI 모델(약 40MB)을 한 번 내려받느라 몇 초~수십 초 걸릴 수 있어요. 이후엔 빨라집니다.
     </p>
 
@@ -60,12 +136,12 @@
     <section id="stage" class="stage" hidden aria-live="polite">
       <div class="stage-head">
         <div>
-          <h2 id="stageName" class="stage-name">처리 중…</h2>
+          <h2 id="stageName" class="stage-name"></h2>
           <p id="stageMeta" class="stage-meta"></p>
         </div>
         <div class="stage-actions">
-          <button id="downloadBtn" class="btn btn-primary" type="button" disabled>PNG 다운로드</button>
-          <button id="resetBtn" class="btn btn-ghost" type="button">새 이미지</button>
+          <button id="downloadBtn" class="btn btn-primary" type="button" data-i18n="download" disabled>PNG 다운로드</button>
+          <button id="resetBtn" class="btn btn-ghost" type="button" data-i18n="reset">새 이미지</button>
         </div>
       </div>
 
@@ -73,7 +149,7 @@
       <div id="progress" class="progress" hidden>
         <div class="spinner" aria-hidden="true"></div>
         <div class="progress-text">
-          <span id="progressLabel">배경을 제거하는 중…</span>
+          <span id="progressLabel"></span>
           <div class="bar"><div id="bar" class="bar-fill"></div></div>
         </div>
       </div>
@@ -81,11 +157,11 @@
       <!-- 비교 뷰 -->
       <div id="compare" class="compare" hidden>
         <figure class="pane">
-          <figcaption>원본</figcaption>
+          <figcaption data-i18n="cap_original">원본</figcaption>
           <div class="pane-img"><img id="origImg" alt="원본 이미지" /></div>
         </figure>
         <figure class="pane">
-          <figcaption>결과 <span class="muted">(투명 배경)</span></figcaption>
+          <figcaption><span data-i18n="cap_result">결과</span> <span class="muted" data-i18n="cap_result_sub">(투명 배경)</span></figcaption>
           <div class="pane-img checker"><img id="resultImg" alt="배경 제거 결과" /></div>
         </figure>
       </div>
@@ -93,13 +169,13 @@
       <!-- 단색 모드 컨트롤 -->
       <div id="colorControls" class="color-controls" hidden>
         <div class="cc-row">
-          <span class="cc-label">배경색</span>
-          <span id="keySwatch" class="cc-swatch" title="현재 배경색"></span>
-          <span class="cc-hint">원본 사진에서 지울 배경을 클릭해 색을 고르세요</span>
-          <button id="autoDetect" class="btn btn-ghost btn-sm" type="button">corners 자동 감지</button>
+          <span class="cc-label" data-i18n="cc_bgcolor">배경색</span>
+          <span id="keySwatch" class="cc-swatch"></span>
+          <span class="cc-hint" data-i18n="cc_hint">원본 사진에서 지울 배경을 클릭해 색을 고르세요</span>
+          <button id="autoDetect" class="btn btn-ghost btn-sm" type="button" data-i18n="cc_auto">모서리 자동 감지</button>
         </div>
         <div class="cc-row">
-          <label class="cc-label" for="tolerance">강도</label>
+          <label class="cc-label" for="tolerance" data-i18n="cc_strength">강도</label>
           <input id="tolerance" type="range" min="5" max="120" value="45" />
           <span id="toleranceVal" class="cc-val">45</span>
         </div>
@@ -111,16 +187,29 @@
     <!-- 히스토리 -->
     <section id="historySection" class="history" hidden>
       <div class="history-head">
-        <h2>최근 작업 <span id="historyCount" class="muted"></span></h2>
-        <button id="clearHistory" class="btn btn-ghost btn-sm" type="button">전체 삭제</button>
+        <h2><span data-i18n="hist_title">최근 작업</span> <span id="historyCount" class="muted"></span></h2>
+        <button id="clearHistory" class="btn btn-ghost btn-sm" type="button" data-i18n="hist_clear">전체 삭제</button>
       </div>
-      <p class="history-note">이 기기에만 저장돼요. 최근 10개까지 보관하고, 클릭하면 다시 다운로드할 수 있어요.</p>
+      <p class="history-note" data-i18n="hist_note">이 기기에만 저장돼요. 최근 10개까지 보관하고, 클릭하면 다시 다운로드할 수 있어요.</p>
       <div id="historyGrid" class="history-grid"></div>
     </section>
 
+    <!-- 소개 / SEO 본문 (검색·AI가 읽는 텍스트) -->
+    <section class="about">
+      <h2 data-i18n="about_title">이미지 배경 제거, 어떻게 동작하나요?</h2>
+      <p data-i18n="about_body">이 무료 온라인 도구는 사진의 배경을 지워 투명 PNG로 만들어 줍니다. 모든 처리는 여러분의 브라우저 안에서 이루어지며, 이미지는 어떤 서버로도 전송되지 않습니다. AI 자동 모드는 인물·제품·복잡한 배경 등 어떤 사진이든 처리하고, 단색 배경 모드는 모델 다운로드 없이 즉시 단색 배경을 제거합니다. 결과는 원본 해상도 그대로, 횟수 제한 없이 무료로 내려받을 수 있습니다.</p>
+    </section>
+
     <footer class="footer">
-      Built with <a href="https://github.com/imgly/background-removal-js" target="_blank" rel="noopener">@imgly/background-removal</a> (AGPL) ·
-      Source: <a href="https://github.com/hanariago/tool-bg-remover" target="_blank" rel="noopener">github.com/hanariago/tool-bg-remover</a>
+      <p class="lic">
+        <strong data-i18n="lic_title">오픈소스 · AGPL-3.0 라이선스</strong> —
+        <span data-i18n="lic_body">이 도구는 자유 소프트웨어입니다. 누구나 소스 코드를 보고, 사용하고, 수정하고, 재배포할 수 있습니다.</span>
+      </p>
+      <p>
+        Built with <a href="https://github.com/imgly/background-removal-js" target="_blank" rel="noopener">@imgly/background-removal</a> (AGPL) ·
+        <a href="https://github.com/hanariago/tool-bg-remover" target="_blank" rel="noopener" data-i18n="footer_source">소스 코드 (GitHub)</a>
+      </p>
+      <p class="privacy" data-i18n="footer_privacy">이미지는 서버로 전송되지 않고 브라우저에서만 처리됩니다.</p>
     </footer>
   </main>
 

@@ -1,0 +1,26 @@
+# Background Remover (배경 제거)
+
+> A free, open-source online tool that removes image backgrounds entirely in the browser. No server upload, no sign-up, no ads, no limits. Outputs full-resolution transparent PNG.
+
+Live: https://hanariago.github.io/tool-bg-remover/
+Source: https://github.com/hanariago/tool-bg-remover
+License: AGPL-3.0
+
+## What it does
+- Removes the background from any image and exports a transparent PNG.
+- 100% client-side: images are processed in the browser and never sent to any server.
+- Unlimited and free — no per-image fees, no resolution caps, no watermark, no login.
+
+## Two modes
+- **AI auto**: a local AI segmentation model (@imgly/background-removal, runs in-browser) handles any photo — people, products, complex backgrounds. The model (~40MB) downloads once on first use and is then cached.
+- **Solid color (chroma key)**: removes plain/solid backgrounds instantly with no model download. Auto-detects the background color from the image corners; the user can also click to pick a color and adjust strength.
+
+## Key facts
+- Privacy: no image ever leaves the device; recent results are stored only in the browser (IndexedDB, last 10).
+- Output: PNG with transparency, at the original input resolution.
+- Languages: Korean, English, Japanese, Chinese (Simplified), Spanish.
+- Tech: vanilla HTML/CSS/JS, hosted on GitHub Pages, no backend.
+
+## Good for
+- Removing backgrounds from product photos, portraits, profile pictures, stickers, logos.
+- A free, private alternative to remove.bg with unlimited full-resolution downloads.

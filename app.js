@@ -1,12 +1,183 @@
 // 배경 제거 — 100% 브라우저 처리. 이미지는 어디로도 전송되지 않습니다.
-// 두 가지 방식:
 //   1) AI 자동  : @imgly/background-removal (AGPL). 로컬 모델, 아무 사진이나.
 //   2) 단색 배경 : 크로마키. 모델 다운로드 없이 즉시. 단색 배경에만 적합.
 
 import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm";
 
-const AI_CONFIG = { model: "isnet_fp16" }; // publicPath 기본값(imgly CDN)에서 모델 1회 다운로드
+const AI_CONFIG = { model: "isnet_fp16" };
 const HISTORY_LIMIT = 10;
+const SUPPORTED = ["ko", "en", "ja", "zh", "es"];
+
+// ── i18n ──
+const I18N = {
+  ko: {
+    lang_label: "언어",
+    brand_h1: "배경 제거", brand_sub: "업로드하면 브라우저에서 바로 배경을 지웁니다",
+    badge_noserver: "서버 전송 없음", badge_unlimited: "무제한 · 무료", badge_res: "원본 해상도",
+    mode_ai: "AI 자동", mode_ai_sub: "아무 사진이나", mode_color: "단색 배경", mode_color_sub: "즉시 · 다운로드 0",
+    dz_title: "이미지를 끌어다 놓거나", pick: "파일 선택", dz_hint: "JPG · PNG · WEBP · 여러 장 가능",
+    first_run: "💡 처음 실행할 땐 AI 모델(약 40MB)을 한 번 내려받느라 몇 초~수십 초 걸릴 수 있어요. 이후엔 빨라집니다.",
+    download: "PNG 다운로드", reset: "새 이미지",
+    cap_original: "원본", cap_result: "결과", cap_result_sub: "(투명 배경)",
+    cc_bgcolor: "배경색", cc_hint: "원본 사진에서 지울 배경을 클릭해 색을 고르세요", cc_auto: "모서리 자동 감지", cc_strength: "강도",
+    hist_title: "최근 작업", hist_note: "이 기기에만 저장돼요. 최근 10개까지 보관하고, 클릭하면 다시 다운로드할 수 있어요.", hist_clear: "전체 삭제",
+    about_title: "이미지 배경 제거, 어떻게 동작하나요?",
+    about_body: "이 무료 온라인 도구는 사진의 배경을 지워 투명 PNG로 만들어 줍니다. 모든 처리는 여러분의 브라우저 안에서 이루어지며, 이미지는 어떤 서버로도 전송되지 않습니다. AI 자동 모드는 인물·제품·복잡한 배경 등 어떤 사진이든 처리하고, 단색 배경 모드는 모델 다운로드 없이 즉시 단색 배경을 제거합니다. 결과는 원본 해상도 그대로, 횟수 제한 없이 무료로 내려받을 수 있습니다.",
+    lic_title: "오픈소스 · AGPL-3.0 라이선스", lic_body: "이 도구는 자유 소프트웨어입니다. 누구나 소스 코드를 보고, 사용하고, 수정하고, 재배포할 수 있습니다.",
+    footer_source: "소스 코드 (GitHub)", footer_privacy: "이미지는 서버로 전송되지 않고 브라우저에서만 처리됩니다.",
+    meta_title: "배경 제거 - 무료 온라인 이미지 배경 제거 (투명 PNG) | Background Remover",
+    meta_desc: "이미지 배경을 브라우저에서 바로 제거하는 무료 온라인 도구. 서버 업로드 없이 완전 로컬 처리, 원본 해상도 투명 PNG 무제한 다운로드. AI 자동 + 단색 배경 모드 지원.",
+    og_locale: "ko_KR",
+    pr_prep: "준비 중…", pr_model_prep: "AI 모델 준비 중… (첫 실행은 조금 걸려요)", pr_model_dl: "AI 모델 내려받는 중… {p}%",
+    pr_removing: "배경 제거 중… {p}%", pr_done: "완료",
+    transparent_png: "투명 PNG", mono: "단색",
+    err_imageonly: "이미지 파일만 올릴 수 있어요 (JPG, PNG, WEBP 등).",
+    err_fail: "배경 제거에 실패했어요: {msg}. 잠시 후 다시 시도하거나 다른 이미지를 올려보세요.",
+    hist_card_title: "클릭하면 결과를 다시 봅니다", hist_dl_title: "다운로드", key_title: "현재 배경색",
+  },
+  en: {
+    lang_label: "Language",
+    brand_h1: "Background Remover", brand_sub: "Erase image backgrounds right in your browser",
+    badge_noserver: "No server upload", badge_unlimited: "Unlimited · Free", badge_res: "Full resolution",
+    mode_ai: "AI auto", mode_ai_sub: "any photo", mode_color: "Solid color", mode_color_sub: "instant · 0 download",
+    dz_title: "Drag & drop an image, or", pick: "Choose file", dz_hint: "JPG · PNG · WEBP · multiple files OK",
+    first_run: "💡 On first run the AI model (~40MB) downloads once, which can take a few seconds. It's fast after that.",
+    download: "Download PNG", reset: "New image",
+    cap_original: "Original", cap_result: "Result", cap_result_sub: "(transparent)",
+    cc_bgcolor: "Background", cc_hint: "Click the background in the original photo to pick its color", cc_auto: "Auto-detect corners", cc_strength: "Strength",
+    hist_title: "Recent", hist_note: "Saved on this device only. Keeps the last 10 — click to download again.", hist_clear: "Clear all",
+    about_title: "How does background removal work?",
+    about_body: "This free online tool erases the background from your photos and gives you a transparent PNG. Everything runs inside your browser — your images are never uploaded to any server. The AI auto mode handles any photo (people, products, complex backgrounds), while the solid-color mode removes plain backgrounds instantly with no model download. Download the result at full original resolution, unlimited and free.",
+    lic_title: "Open source · AGPL-3.0", lic_body: "This is free software. Anyone may view, use, modify, and redistribute the source code.",
+    footer_source: "Source code (GitHub)", footer_privacy: "Images are processed only in your browser and never sent to a server.",
+    meta_title: "Background Remover - Free Online Image Background Removal (Transparent PNG)",
+    meta_desc: "Free online tool to remove image backgrounds right in your browser. No server upload — fully local. Unlimited full-resolution transparent PNG downloads. AI auto + solid-color modes.",
+    og_locale: "en_US",
+    pr_prep: "Preparing…", pr_model_prep: "Preparing AI model… (first run takes a moment)", pr_model_dl: "Downloading AI model… {p}%",
+    pr_removing: "Removing background… {p}%", pr_done: "Done",
+    transparent_png: "Transparent PNG", mono: "solid",
+    err_imageonly: "Only image files are supported (JPG, PNG, WEBP, etc.).",
+    err_fail: "Background removal failed: {msg}. Please try again or use another image.",
+    hist_card_title: "Click to view the result again", hist_dl_title: "Download", key_title: "Current background color",
+  },
+  ja: {
+    lang_label: "言語",
+    brand_h1: "背景除去", brand_sub: "アップロードするとブラウザで背景をすぐ消します",
+    badge_noserver: "サーバー送信なし", badge_unlimited: "無制限・無料", badge_res: "原寸解像度",
+    mode_ai: "AI自動", mode_ai_sub: "どんな写真でも", mode_color: "単色背景", mode_color_sub: "即時・DL不要",
+    dz_title: "画像をドラッグ＆ドロップ、または", pick: "ファイルを選択", dz_hint: "JPG・PNG・WEBP・複数可",
+    first_run: "💡 初回はAIモデル（約40MB）を一度ダウンロードするため数秒〜数十秒かかることがあります。以降は高速です。",
+    download: "PNGをダウンロード", reset: "新しい画像",
+    cap_original: "元画像", cap_result: "結果", cap_result_sub: "(透過)",
+    cc_bgcolor: "背景色", cc_hint: "元の写真で消したい背景をクリックして色を選択", cc_auto: "四隅から自動検出", cc_strength: "強さ",
+    hist_title: "最近の作業", hist_note: "この端末にのみ保存。最新10件まで保持、クリックで再ダウンロード。", hist_clear: "すべて削除",
+    about_title: "背景除去はどのように動作しますか？",
+    about_body: "この無料オンラインツールは写真の背景を消して透過PNGにします。すべての処理はブラウザ内で行われ、画像がサーバーに送信されることはありません。AI自動モードは人物・商品・複雑な背景などあらゆる写真に対応し、単色背景モードはモデルのダウンロードなしで単色背景を即座に除去します。結果は原寸解像度のまま、回数制限なく無料でダウンロードできます。",
+    lic_title: "オープンソース・AGPL-3.0", lic_body: "本ツールは自由ソフトウェアです。誰でもソースコードの閲覧・使用・改変・再配布ができます。",
+    footer_source: "ソースコード (GitHub)", footer_privacy: "画像はサーバーに送信されず、ブラウザ内でのみ処理されます。",
+    meta_title: "背景除去 - 無料オンライン画像背景除去（透過PNG）",
+    meta_desc: "ブラウザで画像の背景をすぐ除去できる無料オンラインツール。サーバー送信なしの完全ローカル処理、原寸解像度の透過PNGを無制限ダウンロード。AI自動＋単色背景モード。",
+    og_locale: "ja_JP",
+    pr_prep: "準備中…", pr_model_prep: "AIモデルを準備中…（初回は少し時間がかかります）", pr_model_dl: "AIモデルをダウンロード中… {p}%",
+    pr_removing: "背景を除去中… {p}%", pr_done: "完了",
+    transparent_png: "透過PNG", mono: "単色",
+    err_imageonly: "画像ファイルのみ対応しています（JPG, PNG, WEBP など）。",
+    err_fail: "背景除去に失敗しました：{msg}。しばらくして再試行するか、別の画像をお試しください。",
+    hist_card_title: "クリックで結果を再表示", hist_dl_title: "ダウンロード", key_title: "現在の背景色",
+  },
+  zh: {
+    lang_label: "语言",
+    brand_h1: "背景移除", brand_sub: "上传后在浏览器中即刻去除背景",
+    badge_noserver: "不上传服务器", badge_unlimited: "无限制 · 免费", badge_res: "原始分辨率",
+    mode_ai: "AI 自动", mode_ai_sub: "任意照片", mode_color: "纯色背景", mode_color_sub: "即时 · 免下载",
+    dz_title: "拖放图片，或", pick: "选择文件", dz_hint: "JPG · PNG · WEBP · 支持多张",
+    first_run: "💡 首次运行需下载一次 AI 模型（约 40MB），可能需要数秒到数十秒，之后会很快。",
+    download: "下载 PNG", reset: "新图片",
+    cap_original: "原图", cap_result: "结果", cap_result_sub: "(透明背景)",
+    cc_bgcolor: "背景色", cc_hint: "在原图上点击要去除的背景以选取颜色", cc_auto: "四角自动识别", cc_strength: "强度",
+    hist_title: "最近", hist_note: "仅保存在本设备。保留最近 10 个，点击可再次下载。", hist_clear: "全部清除",
+    about_title: "背景移除是如何工作的？",
+    about_body: "这个免费在线工具可以去除照片背景并生成透明 PNG。所有处理都在你的浏览器中完成，图片不会上传到任何服务器。AI 自动模式可处理人物、商品、复杂背景等任意照片；纯色背景模式无需下载模型即可即时去除纯色背景。结果以原始分辨率提供，可无限次免费下载。",
+    lic_title: "开源 · AGPL-3.0 许可", lic_body: "本工具是自由软件。任何人都可以查看、使用、修改和再分发源代码。",
+    footer_source: "源代码 (GitHub)", footer_privacy: "图片仅在浏览器中处理，绝不发送到服务器。",
+    meta_title: "背景移除 - 免费在线图片去背景（透明 PNG）",
+    meta_desc: "在浏览器中即刻去除图片背景的免费在线工具。不上传服务器、完全本地处理，无限下载原始分辨率透明 PNG。AI 自动 + 纯色背景模式。",
+    og_locale: "zh_CN",
+    pr_prep: "准备中…", pr_model_prep: "正在准备 AI 模型…（首次运行需稍候）", pr_model_dl: "正在下载 AI 模型… {p}%",
+    pr_removing: "正在去除背景… {p}%", pr_done: "完成",
+    transparent_png: "透明 PNG", mono: "纯色",
+    err_imageonly: "仅支持图片文件（JPG、PNG、WEBP 等）。",
+    err_fail: "背景移除失败：{msg}。请稍后重试或更换图片。",
+    hist_card_title: "点击重新查看结果", hist_dl_title: "下载", key_title: "当前背景色",
+  },
+  es: {
+    lang_label: "Idioma",
+    brand_h1: "Quitar fondo", brand_sub: "Elimina el fondo de tus imágenes directamente en el navegador",
+    badge_noserver: "Sin subir a servidor", badge_unlimited: "Ilimitado · Gratis", badge_res: "Resolución original",
+    mode_ai: "IA automática", mode_ai_sub: "cualquier foto", mode_color: "Fondo sólido", mode_color_sub: "al instante · sin descarga",
+    dz_title: "Arrastra y suelta una imagen, o", pick: "Elegir archivo", dz_hint: "JPG · PNG · WEBP · varias a la vez",
+    first_run: "💡 En el primer uso se descarga una vez el modelo de IA (~40MB), lo que puede tardar unos segundos. Después es rápido.",
+    download: "Descargar PNG", reset: "Nueva imagen",
+    cap_original: "Original", cap_result: "Resultado", cap_result_sub: "(transparente)",
+    cc_bgcolor: "Fondo", cc_hint: "Haz clic en el fondo de la foto original para elegir su color", cc_auto: "Detectar esquinas", cc_strength: "Intensidad",
+    hist_title: "Recientes", hist_note: "Se guarda solo en este dispositivo. Conserva los últimos 10; haz clic para volver a descargar.", hist_clear: "Borrar todo",
+    about_title: "¿Cómo funciona la eliminación de fondo?",
+    about_body: "Esta herramienta en línea gratuita elimina el fondo de tus fotos y genera un PNG transparente. Todo el procesamiento ocurre dentro de tu navegador: tus imágenes nunca se suben a ningún servidor. El modo IA automática funciona con cualquier foto (personas, productos, fondos complejos), y el modo de fondo sólido elimina fondos planos al instante sin descargar ningún modelo. Descarga el resultado a resolución original, sin límites y gratis.",
+    lic_title: "Código abierto · AGPL-3.0", lic_body: "Este es software libre. Cualquiera puede ver, usar, modificar y redistribuir el código fuente.",
+    footer_source: "Código fuente (GitHub)", footer_privacy: "Las imágenes se procesan solo en tu navegador y nunca se envían a un servidor.",
+    meta_title: "Quitar fondo - Eliminar el fondo de imágenes online gratis (PNG transparente)",
+    meta_desc: "Herramienta online gratuita para quitar el fondo de imágenes en el navegador. Sin subir a servidor, totalmente local. Descargas ilimitadas de PNG transparente a resolución original. Modos IA y fondo sólido.",
+    og_locale: "es_ES",
+    pr_prep: "Preparando…", pr_model_prep: "Preparando el modelo de IA… (el primer uso tarda un poco)", pr_model_dl: "Descargando el modelo de IA… {p}%",
+    pr_removing: "Eliminando el fondo… {p}%", pr_done: "Listo",
+    transparent_png: "PNG transparente", mono: "sólido",
+    err_imageonly: "Solo se admiten archivos de imagen (JPG, PNG, WEBP, etc.).",
+    err_fail: "No se pudo eliminar el fondo: {msg}. Inténtalo de nuevo o usa otra imagen.",
+    hist_card_title: "Haz clic para ver el resultado de nuevo", hist_dl_title: "Descargar", key_title: "Color de fondo actual",
+  },
+};
+
+let lang = "ko";
+function t(key, vars) {
+  let s = (I18N[lang] && I18N[lang][key]) ?? I18N.ko[key] ?? key;
+  return vars ? s.replace(/\{(\w+)\}/g, (_, k) => (vars[k] ?? "")) : s;
+}
+function detectLang() {
+  const urlLang = new URLSearchParams(location.search).get("lang");
+  if (urlLang && SUPPORTED.includes(urlLang)) return urlLang;
+  try { const saved = localStorage.getItem("bg_lang"); if (saved && SUPPORTED.includes(saved)) return saved; } catch (e) {}
+  const nav = (navigator.language || "ko").toLowerCase();
+  if (nav.startsWith("zh")) return "zh";
+  const hit = SUPPORTED.find((l) => nav.startsWith(l));
+  return hit || "ko";
+}
+function setMeta(sel, content) {
+  const el = document.querySelector(sel);
+  if (el) el.setAttribute("content", content);
+}
+function applyI18n() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.getAttribute("data-i18n")); });
+  document.title = t("meta_title");
+  setMeta('meta[name="description"]', t("meta_desc"));
+  setMeta('meta[property="og:title"]', t("meta_title"));
+  setMeta('meta[property="og:description"]', t("meta_desc"));
+  setMeta('meta[property="og:locale"]', t("og_locale"));
+  setMeta('meta[name="twitter:title"]', t("meta_title"));
+  setMeta('meta[name="twitter:description"]', t("meta_desc"));
+  origImg.alt = t("cap_original");
+  resultImg.alt = t("cap_result");
+  if (langSelect) langSelect.value = lang;
+  if (colorState) syncKeyUI();
+}
+function setLang(next) {
+  if (!SUPPORTED.includes(next)) return;
+  lang = next;
+  try { localStorage.setItem("bg_lang", next); } catch (e) {}
+  try { const u = new URL(location.href); u.searchParams.set("lang", next); history.replaceState(null, "", u); } catch (e) {}
+  applyI18n();
+  renderHistory();
+}
 
 // ── DOM ──
 const $ = (id) => document.getElementById(id);
@@ -16,6 +187,7 @@ const pickBtn = $("pickBtn");
 const firstRunNote = $("firstRunNote");
 const modeAiBtn = $("modeAi");
 const modeColorBtn = $("modeColor");
+const langSelect = $("langSelect");
 
 const stage = $("stage");
 const stageName = $("stageName");
@@ -44,21 +216,20 @@ const historyCount = $("historyCount");
 const clearHistoryBtn = $("clearHistory");
 
 // ── 상태 ──
-let mode = "ai"; // 'ai' | 'color'
-let current = null; // { blob, filename }  — 현재 다운로드 대상
-let lastFile = null; // 가장 최근 업로드 원본(모드 전환 시 재처리용)
+let mode = "ai";
+let current = null;
+let lastFile = null;
 let modelWarmed = false;
 let busy = false;
 const objectUrls = new Set();
-
-// 단색 모드 작업 상태
-let colorState = null; // { file, w, h, imgData, key:{r,g,b} }
+let colorState = null;
 
 // ── 유틸 ──
 const trackUrl = (u) => { objectUrls.add(u); return u; };
 const revokeAll = () => { objectUrls.forEach((u) => URL.revokeObjectURL(u)); objectUrls.clear(); };
 const baseName = (n) => (n || "image").replace(/\.[^.]+$/, "");
 const outName = (n) => `${baseName(n)}-bg-removed.png`;
+const dimsMeta = (w, h, isColor) => `${w} × ${h}px · ${t("transparent_png")}${isColor ? ` · ${t("mono")}` : ""}`;
 
 function showError(msg) { errorBox.textContent = msg; errorBox.hidden = false; }
 function clearError() { errorBox.hidden = true; errorBox.textContent = ""; }
@@ -66,18 +237,10 @@ function setProgress(pct, label) {
   bar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
   if (label) progressLabel.textContent = label;
 }
-
 function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
+  return new Promise((resolve, reject) => { const img = new Image(); img.onload = () => resolve(img); img.onerror = reject; img.src = src; });
 }
-function canvasToBlob(canvas) {
-  return new Promise((r) => canvas.toBlob(r, "image/png"));
-}
+function canvasToBlob(canvas) { return new Promise((r) => canvas.toBlob(r, "image/png")); }
 
 // ── 모드 ──
 function setMode(next) {
@@ -90,14 +253,12 @@ function setMode(next) {
   origImg.classList.toggle("pickable", next === "color");
   firstRunNote.style.display = next === "ai" ? "" : "none";
   if (next !== "color") colorControls.hidden = true;
-  // 이미 올린 이미지가 있으면 새 모드로 재처리
   if (lastFile) handleFiles([lastFile]);
 }
 
-// ── 파일 진입점 ──
 function handleFiles(fileList) {
   const files = Array.from(fileList).filter((f) => f.type.startsWith("image/"));
-  if (!files.length) { showError("이미지 파일만 올릴 수 있어요 (JPG, PNG, WEBP 등)."); return; }
+  if (!files.length) { showError(t("err_imageonly")); return; }
   if (mode === "ai") processQueueAI(files);
   else processColor(files);
 }
@@ -133,26 +294,25 @@ async function processOneAI(file, counter) {
   const origUrl = trackUrl(URL.createObjectURL(file));
   origImg.src = origUrl;
   stageName.textContent = `${file.name}${counter}`;
-  stageMeta.textContent = "준비 중…";
-  setProgress(4, modelWarmed ? "배경 제거 준비 중…" : "AI 모델 준비 중… (첫 실행은 조금 걸려요)");
+  stageMeta.textContent = t("pr_prep");
+  setProgress(4, modelWarmed ? t("pr_prep") : t("pr_model_prep"));
 
   try {
     const blob = await removeBackground(file, {
       ...AI_CONFIG,
       progress: (key, cur, total) => {
         const pct = total ? Math.round((cur / total) * 100) : 0;
-        if (key.startsWith("fetch")) setProgress(Math.max(8, pct * 0.7), `AI 모델 내려받는 중… ${pct}%`);
-        else if (key.startsWith("compute")) { modelWarmed = true; setProgress(70 + pct * 0.3, `배경 제거 중… ${pct}%`); }
+        if (key.startsWith("fetch")) setProgress(Math.max(8, pct * 0.7), t("pr_model_dl", { p: pct }));
+        else if (key.startsWith("compute")) { modelWarmed = true; setProgress(70 + pct * 0.3, t("pr_removing", { p: pct })); }
       },
     });
-
     modelWarmed = true;
-    setProgress(100, "완료");
-    await showResult(blob, outName(file.name), origUrl);
+    setProgress(100, t("pr_done"));
+    await showResult(blob, outName(file.name), origUrl, false);
   } catch (err) {
     console.error(err);
     progress.hidden = true;
-    showError(`배경 제거에 실패했어요: ${err?.message || err}. 잠시 후 다시 시도하거나 다른 이미지를 올려보세요.`);
+    showError(t("err_fail", { msg: err?.message || err }));
   }
 }
 
@@ -160,8 +320,6 @@ async function processOneAI(file, counter) {
 async function processColor(files) {
   beginStage();
   progress.hidden = true;
-
-  // 여러 장이면 마지막 1장만 인터랙티브 편집, 나머지는 자동 키로 히스토리에 저장
   for (let i = 0; i < files.length - 1; i++) await autoColorToHistory(files[i]);
 
   const file = files[files.length - 1];
@@ -170,8 +328,7 @@ async function processColor(files) {
   const img = await loadImage(url);
 
   const canvas = document.createElement("canvas");
-  canvas.width = img.naturalWidth;
-  canvas.height = img.naturalHeight;
+  canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
   ctx.drawImage(img, 0, 0);
   const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -184,17 +341,14 @@ async function processColor(files) {
   compare.hidden = false;
   colorControls.hidden = false;
   syncKeyUI();
-  await applyChroma(true); // 초기 결과 + 히스토리 저장
+  await applyChroma(true);
 }
 
 function detectCornerColor(imgData) {
   const { data, width, height } = imgData;
   const pts = [[0, 0], [width - 1, 0], [0, height - 1], [width - 1, height - 1]];
   let r = 0, g = 0, b = 0;
-  for (const [x, y] of pts) {
-    const i = (y * width + x) * 4;
-    r += data[i]; g += data[i + 1]; b += data[i + 2];
-  }
+  for (const [x, y] of pts) { const i = (y * width + x) * 4; r += data[i]; g += data[i + 1]; b += data[i + 2]; }
   return { r: Math.round(r / 4), g: Math.round(g / 4), b: Math.round(b / 4) };
 }
 
@@ -202,16 +356,15 @@ function syncKeyUI() {
   if (!colorState) return;
   const { r, g, b } = colorState.key;
   keySwatch.style.background = `rgb(${r},${g},${b})`;
+  keySwatch.title = t("key_title");
 }
 
-// 키 색과의 거리로 알파 결정 → 투명 PNG
 async function applyChroma(save = false) {
   if (!colorState) return;
   const { imgData, w, h, key } = colorState;
-  const t = Number(toleranceInput.value);
-  const feather = Math.max(8, t * 0.4);
+  const tol = Number(toleranceInput.value);
+  const feather = Math.max(8, tol * 0.4);
   const src = imgData.data;
-
   const out = new ImageData(w, h);
   const dst = out.data;
   for (let i = 0; i < src.length; i += 4) {
@@ -219,24 +372,22 @@ async function applyChroma(save = false) {
     const dist = Math.sqrt(dr * dr + dg * dg + db * db);
     dst[i] = src[i]; dst[i + 1] = src[i + 1]; dst[i + 2] = src[i + 2];
     let a = src[i + 3];
-    if (dist <= t - feather) a = 0;
-    else if (dist < t) a = Math.round(a * ((dist - (t - feather)) / feather));
+    if (dist <= tol - feather) a = 0;
+    else if (dist < tol) a = Math.round(a * ((dist - (tol - feather)) / feather));
     dst[i + 3] = a;
   }
-
   const canvas = document.createElement("canvas");
   canvas.width = w; canvas.height = h;
   canvas.getContext("2d").putImageData(out, 0, 0);
   const blob = await canvasToBlob(canvas);
 
-  // 미리보기 갱신(기존 결과 URL만 정리)
   if (current?.url) URL.revokeObjectURL(current.url);
   const url = URL.createObjectURL(blob);
   resultImg.src = url;
   const filename = outName(colorState.file.name);
   current = { blob, filename, url };
   downloadBtn.disabled = false;
-  stageMeta.textContent = `${w} × ${h}px · 투명 PNG · 단색`;
+  stageMeta.textContent = dimsMeta(w, h, true);
 
   if (save) {
     const thumb = await makeThumb(URL.createObjectURL(colorState.file));
@@ -255,13 +406,13 @@ async function autoColorToHistory(file) {
     ctx.drawImage(img, 0, 0);
     const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const key = detectCornerColor(imgData);
-    const t = Number(toleranceInput.value), feather = Math.max(8, t * 0.4);
+    const tol = Number(toleranceInput.value), feather = Math.max(8, tol * 0.4);
     const d = imgData.data;
     for (let i = 0; i < d.length; i += 4) {
       const dr = d[i] - key.r, dg = d[i + 1] - key.g, db = d[i + 2] - key.b;
       const dist = Math.sqrt(dr * dr + dg * dg + db * db);
-      if (dist <= t - feather) d[i + 3] = 0;
-      else if (dist < t) d[i + 3] = Math.round(d[i + 3] * ((dist - (t - feather)) / feather));
+      if (dist <= tol - feather) d[i + 3] = 0;
+      else if (dist < tol) d[i + 3] = Math.round(d[i + 3] * ((dist - (tol - feather)) / feather));
     }
     ctx.putImageData(imgData, 0, 0);
     const blob = await canvasToBlob(canvas);
@@ -271,7 +422,6 @@ async function autoColorToHistory(file) {
   } catch (e) { console.warn("color batch skipped:", e); }
 }
 
-// 원본 클릭 → 그 지점 색을 배경색으로
 async function pickColorFromOriginal(ev) {
   if (mode !== "color" || !colorState) return;
   const rect = origImg.getBoundingClientRect();
@@ -290,8 +440,8 @@ async function pickColorFromOriginal(ev) {
   await applyChroma(true);
 }
 
-// ── 공통 결과 표시(AI) ──
-async function showResult(blob, filename, origUrl) {
+// ── 결과 표시(AI) ──
+async function showResult(blob, filename, origUrl, isColor) {
   const resultUrl = trackUrl(URL.createObjectURL(blob));
   resultImg.src = resultUrl;
   current = { blob, filename };
@@ -299,7 +449,7 @@ async function showResult(blob, filename, origUrl) {
   compare.hidden = false;
   downloadBtn.disabled = false;
   const dims = await imageDims(blob);
-  stageMeta.textContent = dims ? `${dims.w} × ${dims.h}px · 투명 PNG` : "투명 PNG";
+  stageMeta.textContent = dims ? dimsMeta(dims.w, dims.h, isColor) : t("transparent_png");
   const thumb = await makeThumb(origUrl);
   await saveHistory({ name: filename, ts: Date.now(), origThumb: thumb, blob, w: dims?.w, h: dims?.h });
   await renderHistory();
@@ -314,7 +464,6 @@ function imageDims(blob) {
     img.src = url;
   });
 }
-
 function makeThumb(srcUrl, max = 240) {
   return new Promise((resolve) => {
     const img = new Image();
@@ -330,7 +479,6 @@ function makeThumb(srcUrl, max = 240) {
     img.src = srcUrl;
   });
 }
-
 function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -342,10 +490,7 @@ function downloadBlob(blob, filename) {
 function reset() {
   revokeAll();
   if (current?.url) URL.revokeObjectURL(current.url);
-  stage.hidden = true;
-  compare.hidden = true;
-  progress.hidden = true;
-  colorControls.hidden = true;
+  stage.hidden = true; compare.hidden = true; progress.hidden = true; colorControls.hidden = true;
   current = null; lastFile = null; colorState = null;
   fileInput.value = "";
   firstRunNote.hidden = false;
@@ -372,11 +517,11 @@ function openDB() {
 }
 function tx(db, mode, fn) {
   return new Promise((resolve, reject) => {
-    const t = db.transaction("items", mode);
-    const req = fn(t.objectStore("items"));
-    t.oncomplete = () => resolve(req?.result);
-    t.onerror = () => reject(t.error);
-    t.onabort = () => reject(t.error);
+    const t2 = db.transaction("items", mode);
+    const req = fn(t2.objectStore("items"));
+    t2.oncomplete = () => resolve(req?.result);
+    t2.onerror = () => reject(t2.error);
+    t2.onabort = () => reject(t2.error);
   });
 }
 function getAll(db) {
@@ -399,8 +544,7 @@ async function saveHistory(item) {
 const histUrls = new Set();
 async function renderHistory() {
   let items = [];
-  try { items = (await getAll(await openDB())).sort((a, b) => b.ts - a.ts); }
-  catch (e) { console.warn(e); }
+  try { items = (await getAll(await openDB())).sort((a, b) => b.ts - a.ts); } catch (e) { console.warn(e); }
   histUrls.forEach((u) => URL.revokeObjectURL(u)); histUrls.clear();
 
   if (!items.length) { historySection.hidden = true; return; }
@@ -411,58 +555,50 @@ async function renderHistory() {
   for (const it of items) {
     const card = document.createElement("div");
     card.className = "hist-card";
-    card.title = "클릭하면 결과를 다시 봅니다";
-
+    card.title = t("hist_card_title");
     const thumb = document.createElement("div");
     thumb.className = "hist-thumb";
     const tImg = document.createElement("img");
     const u = URL.createObjectURL(it.blob); histUrls.add(u);
     tImg.src = u; tImg.alt = it.name;
     thumb.appendChild(tImg);
-
     const meta = document.createElement("div");
     meta.className = "hist-meta";
     const nm = document.createElement("span");
     nm.className = "hist-name"; nm.textContent = it.name;
     const dl = document.createElement("button");
-    dl.className = "hist-dl"; dl.type = "button"; dl.textContent = "↓"; dl.title = "다운로드";
+    dl.className = "hist-dl"; dl.type = "button"; dl.textContent = "↓"; dl.title = t("hist_dl_title");
     dl.addEventListener("click", (e) => { e.stopPropagation(); downloadBlob(it.blob, it.name); });
     meta.append(nm, dl);
-
     card.addEventListener("click", () => loadFromHistory(it));
     card.append(thumb, meta);
     historyGrid.appendChild(card);
   }
 }
-
 function loadFromHistory(it) {
   clearError();
   firstRunNote.hidden = true;
-  stage.hidden = false;
-  progress.hidden = true;
-  colorControls.hidden = true;
-  compare.hidden = false;
+  stage.hidden = false; progress.hidden = true; colorControls.hidden = true; compare.hidden = false;
   colorState = null;
   origImg.classList.remove("pickable");
   origImg.src = it.origThumb || "";
   const url = trackUrl(URL.createObjectURL(it.blob));
   resultImg.src = url;
   stageName.textContent = it.name;
-  stageMeta.textContent = it.w && it.h ? `${it.w} × ${it.h}px · 투명 PNG` : "투명 PNG";
+  stageMeta.textContent = it.w && it.h ? dimsMeta(it.w, it.h, false) : t("transparent_png");
   current = { blob: it.blob, filename: it.name };
   downloadBtn.disabled = false;
   stage.scrollIntoView({ behavior: "smooth", block: "start" });
 }
-
 async function clearHistory() {
-  try { await tx(await openDB(), "readwrite", (s) => s.clear()); }
-  catch (e) { console.warn(e); }
+  try { await tx(await openDB(), "readwrite", (s) => s.clear()); } catch (e) { console.warn(e); }
   await renderHistory();
 }
 
 // ── 이벤트 ──
 modeAiBtn.addEventListener("click", () => setMode("ai"));
 modeColorBtn.addEventListener("click", () => setMode("color"));
+langSelect.addEventListener("change", (e) => setLang(e.target.value));
 
 pickBtn.addEventListener("click", (e) => { e.stopPropagation(); fileInput.click(); });
 dropzone.addEventListener("click", () => fileInput.click());
@@ -474,13 +610,8 @@ fileInput.addEventListener("change", (e) => { if (e.target.files?.length) handle
   dropzone.addEventListener(ev, (e) => { e.preventDefault(); if (ev === "dragleave" && dropzone.contains(e.relatedTarget)) return; dropzone.classList.remove("drag"); }));
 dropzone.addEventListener("drop", (e) => { if (e.dataTransfer?.files?.length) handleFiles(e.dataTransfer.files); });
 window.addEventListener("dragover", (e) => e.preventDefault());
-window.addEventListener("drop", (e) => {
-  if (e.target.closest("#dropzone")) return;
-  e.preventDefault();
-  if (e.dataTransfer?.files?.length) handleFiles(e.dataTransfer.files);
-});
+window.addEventListener("drop", (e) => { if (e.target.closest("#dropzone")) return; e.preventDefault(); if (e.dataTransfer?.files?.length) handleFiles(e.dataTransfer.files); });
 
-// 단색 컨트롤
 toleranceInput.addEventListener("input", () => { toleranceVal.textContent = toleranceInput.value; applyChroma(false); });
 toleranceInput.addEventListener("change", () => applyChroma(true));
 autoDetectBtn.addEventListener("click", () => { if (colorState) { colorState.key = detectCornerColor(colorState.imgData); syncKeyUI(); applyChroma(true); } });
@@ -490,4 +621,7 @@ downloadBtn.addEventListener("click", () => { if (current) downloadBlob(current.
 resetBtn.addEventListener("click", reset);
 clearHistoryBtn.addEventListener("click", clearHistory);
 
+// ── 시작 ──
+lang = detectLang();
+applyI18n();
 renderHistory();

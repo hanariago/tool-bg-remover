@@ -1,0 +1,44 @@
+# tool-bg-remover — robots.txt
+# 모든 일반 검색엔진 + AI 크롤러 전체 허용 (검색·AEO 노출 목적)
+
+User-agent: *
+Allow: /
+
+# AI / LLM 크롤러 명시 허용
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+Sitemap: https://hanariago.github.io/tool-bg-remover/sitemap.xml

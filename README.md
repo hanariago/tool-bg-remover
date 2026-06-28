@@ -17,6 +17,8 @@
 - 이미지 외부 전송 없음 — 완전 로컬 처리
 - 최근 작업 10개 로컬 보관(IndexedDB) → 새로고침 후에도 다시 다운로드
 - 모바일 지원
+- **다국어 지원** (한국어·English·日本語·中文·Español, 브라우저 언어 자동 감지 + `?lang=`)
+- SEO/AEO 최적화 (OG·Twitter 카드, JSON-LD, `robots.txt`·`sitemap.xml`·`llms.txt`)
 
 ## 사용법
 1. 이미지를 업로드하거나 드래그앤드롭
