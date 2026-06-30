@@ -441,6 +441,73 @@ a { color: var(--accent); }
 .footer a { color: var(--muted); text-decoration: underline; }
 .footer a:hover { color: var(--accent); }
 
+/* ── 첫 방문 가이드 팝업 ── */
+.guide-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(26, 24, 20, .45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: guideFade .18s ease;
+}
+@keyframes guideFade { from { opacity: 0; } to { opacity: 1; } }
+.guide-modal {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 48px rgba(26, 24, 20, .22);
+  max-width: 440px;
+  width: 100%;
+  padding: 30px 26px 20px;
+  animation: guidePop .22s cubic-bezier(.2, .7, .3, 1.2);
+}
+@keyframes guidePop { from { transform: translateY(8px) scale(.98); opacity: 0; } to { transform: none; opacity: 1; } }
+.guide-x {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 8px;
+}
+.guide-x:hover { background: var(--bg); color: var(--ink); }
+.guide-modal h2 { margin: 0 8px 8px 0; font-size: 20px; }
+.guide-lead { margin: 0 0 16px; font-size: 14px; color: #55534C; line-height: 1.6; }
+.guide-list { margin: 0 0 22px; padding: 0; list-style: none; display: grid; gap: 11px; }
+.guide-list li {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.5;
+  padding-left: 2px;
+}
+.guide-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.guide-dont {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+.guide-dont input { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+
 /* ── Mobile ── */
 @media (max-width: 600px) {
   .app { padding: 22px 14px 48px; }
@@ -451,4 +518,7 @@ a { color: var(--accent); }
   .dropzone { padding: 36px 16px; }
   .mode-tab { font-size: 14px; padding: 10px 8px; }
   .mode-tab .mode-sub { display: none; }
+  .guide-foot { flex-direction: column; align-items: stretch; }
+  .guide-foot .btn { width: 100%; }
+  .guide-dont { justify-content: center; }
 }

@@ -29,6 +29,10 @@ const I18N = {
     about_body: "이 무료 온라인 도구는 사진의 배경을 지워 투명 PNG로 만들어 줍니다. 모든 처리는 여러분의 브라우저 안에서 이루어지며, 이미지는 어떤 서버로도 전송되지 않습니다. AI 자동 모드는 인물·제품·복잡한 배경 등 어떤 사진이든 처리하고, 단색 배경 모드는 모델 다운로드 없이 즉시 단색 배경을 제거합니다. 결과는 원본 해상도 그대로, 횟수 제한 없이 무료로 내려받을 수 있습니다.",
     lic_title: "오픈소스 · AGPL-3.0 라이선스", lic_body: "이 도구는 자유 소프트웨어입니다. 누구나 소스 코드를 보고, 사용하고, 수정하고, 재배포할 수 있습니다.",
     footer_source: "소스 코드 (GitHub)", footer_privacy: "이미지는 서버로 전송되지 않고 브라우저에서만 처리됩니다.", made_by: "만든 사람", hub_link: "다른 도구 모음",
+    guide_title: "배경 제거에 오신 걸 환영해요", guide_lead: "이미지를 올리면 브라우저에서 바로 배경을 지워 투명 PNG로 만들어 드려요.",
+    guide_p1: "✨ AI 자동 — 인물·상품·복잡한 배경 등 아무 사진이나", guide_p2: "🎨 단색 배경 — 단색 배경을 모델 다운로드 없이 즉시",
+    guide_p3: "⬇ 원본 해상도로 무제한·무료 다운로드 · 이미지는 서버로 전송되지 않아요",
+    guide_dont_today: "오늘 다시 보지 않기", guide_close: "닫기", guide_aria_close: "닫기",
     about_use: "프로필 사진과 상품 사진의 누끼를 따거나, 투명 배경 PNG를 만들거나, 쇼핑몰·블로그·유튜브 썸네일용 이미지를 손쉽게 만들 수 있습니다. 사진 배경 지우기, 누끼 따기가 클릭 몇 번으로 끝납니다.",
     faq_title: "자주 묻는 질문",
     faq_q1: "사진이 서버로 업로드되나요?", faq_a1: "아니요. 모든 처리는 여러분의 브라우저 안에서만 이루어지며, 이미지는 어떤 서버로도 전송되지 않습니다.",
@@ -61,6 +65,10 @@ const I18N = {
     about_body: "This free online tool erases the background from your photos and gives you a transparent PNG. Everything runs inside your browser — your images are never uploaded to any server. The AI auto mode handles any photo (people, products, complex backgrounds), while the solid-color mode removes plain backgrounds instantly with no model download. Download the result at full original resolution, unlimited and free.",
     lic_title: "Open source · AGPL-3.0", lic_body: "This is free software. Anyone may view, use, modify, and redistribute the source code.",
     footer_source: "Source code (GitHub)", footer_privacy: "Images are processed only in your browser and never sent to a server.", made_by: "Made by", hub_link: "More tools",
+    guide_title: "Welcome to Background Remover", guide_lead: "Upload an image and we'll erase its background right in your browser, giving you a transparent PNG.",
+    guide_p1: "✨ AI auto — any photo (people, products, complex backgrounds)", guide_p2: "🎨 Solid color — remove plain backgrounds instantly, no model download",
+    guide_p3: "⬇ Unlimited free downloads at full resolution · images never leave your browser",
+    guide_dont_today: "Don't show again today", guide_close: "Got it", guide_aria_close: "Close",
     about_use: "Cut out profile pictures and product photos, create transparent-background PNGs, or prep images for shop listings, blogs, and YouTube thumbnails — removing a photo background takes just a couple of clicks.",
     faq_title: "FAQ",
     faq_q1: "Are my photos uploaded to a server?", faq_a1: "No. All processing happens entirely in your browser — your images are never sent to any server.",
@@ -93,6 +101,10 @@ const I18N = {
     about_body: "この無料オンラインツールは写真の背景を消して透過PNGにします。すべての処理はブラウザ内で行われ、画像がサーバーに送信されることはありません。AI自動モードは人物・商品・複雑な背景などあらゆる写真に対応し、単色背景モードはモデルのダウンロードなしで単色背景を即座に除去します。結果は原寸解像度のまま、回数制限なく無料でダウンロードできます。",
     lic_title: "オープンソース・AGPL-3.0", lic_body: "本ツールは自由ソフトウェアです。誰でもソースコードの閲覧・使用・改変・再配布ができます。",
     footer_source: "ソースコード (GitHub)", footer_privacy: "画像はサーバーに送信されず、ブラウザ内でのみ処理されます。", made_by: "制作", hub_link: "他のツール",
+    guide_title: "背景除去へようこそ", guide_lead: "画像をアップロードすると、ブラウザ内で背景を消して透過PNGにします。",
+    guide_p1: "✨ AI自動 — 人物・商品・複雑な背景などどんな写真でも", guide_p2: "🎨 単色背景 — 単色の背景をモデル不要で即座に",
+    guide_p3: "⬇ 原寸解像度で無制限・無料ダウンロード・画像はブラウザ外に出ません",
+    guide_dont_today: "今日は表示しない", guide_close: "閉じる", guide_aria_close: "閉じる",
     about_use: "プロフィール写真や商品写真の切り抜き、透過背景PNGの作成、ショップ・ブログ・YouTubeサムネイル用の画像づくりが数クリックで完了します。",
     faq_title: "よくある質問",
     faq_q1: "写真はサーバーにアップロードされますか？", faq_a1: "いいえ。すべての処理はブラウザ内だけで行われ、画像がサーバーに送信されることはありません。",
@@ -125,6 +137,10 @@ const I18N = {
     about_body: "这个免费在线工具可以去除照片背景并生成透明 PNG。所有处理都在你的浏览器中完成，图片不会上传到任何服务器。AI 自动模式可处理人物、商品、复杂背景等任意照片；纯色背景模式无需下载模型即可即时去除纯色背景。结果以原始分辨率提供，可无限次免费下载。",
     lic_title: "开源 · AGPL-3.0 许可", lic_body: "本工具是自由软件。任何人都可以查看、使用、修改和再分发源代码。",
     footer_source: "源代码 (GitHub)", footer_privacy: "图片仅在浏览器中处理，绝不发送到服务器。", made_by: "制作", hub_link: "更多工具",
+    guide_title: "欢迎使用背景移除", guide_lead: "上传图片，即可在浏览器中去除背景并生成透明 PNG。",
+    guide_p1: "✨ AI 自动 — 人物、商品、复杂背景等任意照片", guide_p2: "🎨 纯色背景 — 无需下载模型，即时去除纯色背景",
+    guide_p3: "⬇ 原始分辨率无限免费下载 · 图片不会离开你的浏览器",
+    guide_dont_today: "今天不再显示", guide_close: "关闭", guide_aria_close: "关闭",
     about_use: "可用于抠出人像和商品照片、制作透明背景 PNG，或为网店、博客和 YouTube 缩略图准备图片——去除照片背景只需点击几下。",
     faq_title: "常见问题",
     faq_q1: "照片会上传到服务器吗？", faq_a1: "不会。所有处理都在你的浏览器中完成，图片绝不会发送到任何服务器。",
@@ -157,6 +173,10 @@ const I18N = {
     about_body: "Esta herramienta en línea gratuita elimina el fondo de tus fotos y genera un PNG transparente. Todo el procesamiento ocurre dentro de tu navegador: tus imágenes nunca se suben a ningún servidor. El modo IA automática funciona con cualquier foto (personas, productos, fondos complejos), y el modo de fondo sólido elimina fondos planos al instante sin descargar ningún modelo. Descarga el resultado a resolución original, sin límites y gratis.",
     lic_title: "Código abierto · AGPL-3.0", lic_body: "Este es software libre. Cualquiera puede ver, usar, modificar y redistribuir el código fuente.",
     footer_source: "Código fuente (GitHub)", footer_privacy: "Las imágenes se procesan solo en tu navegador y nunca se envían a un servidor.", made_by: "Hecho por", hub_link: "Más herramientas",
+    guide_title: "Te damos la bienvenida a Quitar fondo", guide_lead: "Sube una imagen y eliminaremos su fondo en tu navegador, dándote un PNG transparente.",
+    guide_p1: "✨ IA automática — cualquier foto (personas, productos, fondos complejos)", guide_p2: "🎨 Fondo sólido — quita fondos planos al instante, sin descargar modelo",
+    guide_p3: "⬇ Descargas gratis e ilimitadas a resolución original · las imágenes nunca salen de tu navegador",
+    guide_dont_today: "No mostrar hoy de nuevo", guide_close: "Cerrar", guide_aria_close: "Cerrar",
     about_use: "Recorta fotos de perfil y de productos, crea PNG con fondo transparente o prepara imágenes para tiendas, blogs y miniaturas de YouTube: quitar el fondo de una foto toma solo un par de clics.",
     faq_title: "Preguntas frecuentes",
     faq_q1: "¿Mis fotos se suben a un servidor?", faq_a1: "No. Todo el procesamiento ocurre por completo en tu navegador; tus imágenes nunca se envían a ningún servidor.",
@@ -210,6 +230,7 @@ function applyI18n() {
   origImg.alt = t("cap_original");
   resultImg.alt = t("cap_result");
   if (langSelect) langSelect.value = lang;
+  if (guideX) guideX.setAttribute("aria-label", t("guide_aria_close"));
   if (colorState) syncKeyUI();
 }
 function setLang(next) {
@@ -230,6 +251,10 @@ const firstRunNote = $("firstRunNote");
 const modeAiBtn = $("modeAi");
 const modeColorBtn = $("modeColor");
 const langSelect = $("langSelect");
+const guideOverlay = $("guideOverlay");
+const guideX = $("guideX");
+const guideClose = $("guideClose");
+const guideDont = $("guideDont");
 
 const stage = $("stage");
 const stageName = $("stageName");
@@ -663,7 +688,25 @@ downloadBtn.addEventListener("click", () => { if (current) downloadBlob(current.
 resetBtn.addEventListener("click", reset);
 clearHistoryBtn.addEventListener("click", clearHistory);
 
+// ── 첫 방문 가이드 팝업 ──
+const todayStr = () => new Date().toISOString().slice(0, 10);
+function maybeShowGuide() {
+  let hiddenDate = null;
+  try { hiddenDate = localStorage.getItem("bg_guide_hidden_date"); } catch (e) {}
+  if (hiddenDate === todayStr()) return; // '오늘 다시 보지 않기'를 누른 날이면 표시 안 함
+  guideOverlay.hidden = false;
+}
+function closeGuide() {
+  if (guideDont.checked) { try { localStorage.setItem("bg_guide_hidden_date", todayStr()); } catch (e) {} }
+  guideOverlay.hidden = true;
+}
+guideX.addEventListener("click", closeGuide);
+guideClose.addEventListener("click", closeGuide);
+guideOverlay.addEventListener("click", (e) => { if (e.target === guideOverlay) closeGuide(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !guideOverlay.hidden) closeGuide(); });
+
 // ── 시작 ──
 lang = detectLang();
 applyI18n();
 renderHistory();
+maybeShowGuide();

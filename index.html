@@ -267,6 +267,27 @@
     </footer>
   </main>
 
+  <!-- 첫 방문 가이드 팝업 -->
+  <div id="guideOverlay" class="guide-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+    <div class="guide-modal">
+      <button id="guideX" class="guide-x" type="button" aria-label="Close">×</button>
+      <h2 id="guideTitle" data-i18n="guide_title">배경 제거에 오신 걸 환영해요</h2>
+      <p class="guide-lead" data-i18n="guide_lead">이미지를 올리면 브라우저에서 바로 배경을 지워 투명 PNG로 만들어 드려요.</p>
+      <ul class="guide-list">
+        <li data-i18n="guide_p1">✨ AI 자동 — 인물·상품·복잡한 배경 등 아무 사진이나</li>
+        <li data-i18n="guide_p2">🎨 단색 배경 — 단색 배경을 모델 다운로드 없이 즉시</li>
+        <li data-i18n="guide_p3">⬇ 원본 해상도로 무제한·무료 다운로드 · 이미지는 서버로 전송되지 않아요</li>
+      </ul>
+      <div class="guide-foot">
+        <label class="guide-dont">
+          <input type="checkbox" id="guideDont" />
+          <span data-i18n="guide_dont_today">오늘 다시 보지 않기</span>
+        </label>
+        <button id="guideClose" class="btn btn-primary" type="button" data-i18n="guide_close">닫기</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="app.js"></script>
 </body>
 </html>
