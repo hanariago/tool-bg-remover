@@ -207,7 +207,7 @@ function t(key, vars) {
 function detectLang() {
   const urlLang = new URLSearchParams(location.search).get("lang");
   if (urlLang && SUPPORTED.includes(urlLang)) return urlLang;
-  try { const saved = localStorage.getItem("bg_lang"); if (saved && SUPPORTED.includes(saved)) return saved; } catch (e) {}
+  try { const saved = localStorage.getItem("bgRemoverLang"); if (saved && SUPPORTED.includes(saved)) return saved; } catch (e) {}
   const nav = (navigator.language || "ko").toLowerCase();
   if (nav.startsWith("zh")) return "zh";
   const hit = SUPPORTED.find((l) => nav.startsWith(l));
@@ -236,7 +236,7 @@ function applyI18n() {
 function setLang(next) {
   if (!SUPPORTED.includes(next)) return;
   lang = next;
-  try { localStorage.setItem("bg_lang", next); } catch (e) {}
+  try { localStorage.setItem("bgRemoverLang", next); } catch (e) {}
   try { const u = new URL(location.href); u.searchParams.set("lang", next); history.replaceState(null, "", u); } catch (e) {}
   applyI18n();
   renderHistory();
@@ -689,15 +689,20 @@ resetBtn.addEventListener("click", reset);
 clearHistoryBtn.addEventListener("click", clearHistory);
 
 // ── 첫 방문 가이드 팝업 ──
+// 키는 도구 전용 접두어(bgRemover) — 모든 도구가 같은 origin이라 generic 키는 충돌함
+const GUIDE_DATE_KEY = "bgRemoverGuideHideDate"; // localStorage: '오늘 다시 보지 않기' 누른 날짜
+const GUIDE_SEEN_KEY = "bgRemoverGuideSeen";     // sessionStorage: 이번 세션에 이미 봤음
 const todayStr = () => new Date().toISOString().slice(0, 10);
 function maybeShowGuide() {
-  let hiddenDate = null;
-  try { hiddenDate = localStorage.getItem("bg_guide_hidden_date"); } catch (e) {}
-  if (hiddenDate === todayStr()) return; // '오늘 다시 보지 않기'를 누른 날이면 표시 안 함
-  guideOverlay.hidden = false;
+  let hide = null, seen = null;
+  try { hide = localStorage.getItem(GUIDE_DATE_KEY); } catch (e) {}
+  try { seen = sessionStorage.getItem(GUIDE_SEEN_KEY); } catch (e) {}
+  // '오늘 다시 보지 않기'한 날도 아니고, 이번 세션에 본 적도 없을 때만 표시
+  if (hide !== todayStr() && !seen) guideOverlay.hidden = false;
 }
 function closeGuide() {
-  if (guideDont.checked) { try { localStorage.setItem("bg_guide_hidden_date", todayStr()); } catch (e) {} }
+  if (guideDont.checked) { try { localStorage.setItem(GUIDE_DATE_KEY, todayStr()); } catch (e) {} }
+  try { sessionStorage.setItem(GUIDE_SEEN_KEY, "1"); } catch (e) {} // 체크 안 해도 이번 세션엔 다시 안 뜸
   guideOverlay.hidden = true;
 }
 guideX.addEventListener("click", closeGuide);
